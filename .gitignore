@@ -1,0 +1,14 @@
+# Raw source media (cleaned/renamed copies live in site/assets/)
+/*.jpeg
+/*.jpg
+/*.png
+/*.mp4
+/Mjne_World_Corporate_Brochure.pdf
+
+# Local dev tooling (headless-screenshot QA helper)
+site/.tools/
+
+# OS / editor cruft
+Thumbs.db
+.DS_Store
+*.log

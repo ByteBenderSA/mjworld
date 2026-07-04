@@ -330,12 +330,16 @@ h1,h2,h3,h4 { font-family: var(--display); font-weight: 600; line-height: 1.06; 
    ===================================================================== */
 .hero {
   position:relative; min-height: 100svh; min-height: 100vh;
-  display:flex; align-items:flex-end;
+  display:flex; flex-direction:column;
   background: var(--navy-900); color:#fff; overflow:hidden;
 }
-.hero-slides { position:absolute; inset:0; }
+/* Grid-stacked slides: all overlap in one cell (for the crossfade) yet still
+   contribute height, so the hero sizes to the tallest slide's content. */
+.hero-slides { position:relative; flex:1 1 auto; display:grid; }
 .hero-slide {
-  position:absolute; inset:0; opacity:0; visibility:hidden;
+  grid-area: 1 / 1; position:relative;
+  display:flex; align-items:center; padding-top: 104px;
+  opacity:0; visibility:hidden;
   transition: opacity 1.1s var(--ease), visibility 1.1s;
 }
 .hero-slide.active { opacity:1; visibility:visible; }
@@ -354,7 +358,7 @@ h1,h2,h3,h4 { font-family: var(--display); font-weight: 600; line-height: 1.06; 
 /* gradient fallback backgrounds per slide */
 .hero-slide .grad { position:absolute; inset:0; }
 
-.hero-inner { position:relative; z-index:3; width:100%; padding-bottom: clamp(96px, 13vh, 150px); padding-top: 120px; }
+.hero-inner { position:relative; z-index:3; width:100%; padding-block: clamp(20px, 3.5vh, 44px); }
 .hero-eyebrow { display:flex; align-items:center; gap:.8rem; margin-bottom:1.4rem; }
 .hero-eyebrow .num { font-family:var(--display); font-weight:700; font-size:.8rem; color:#fff; opacity:.7; letter-spacing:.1em; }
 .hero-eyebrow .tag {
@@ -364,12 +368,28 @@ h1,h2,h3,h4 { font-family: var(--display); font-weight: 600; line-height: 1.06; 
 }
 .hero-eyebrow .tag.t-emerald { background: rgba(38,155,105,.92); box-shadow:none; }
 .hero h1.hero-title {
-  color:#fff; max-width: 18ch;
-  font-size: clamp(2.5rem, 6vw, 5.3rem); font-weight:700; letter-spacing:-.035em; line-height:.99;
+  color:#fff; max-width: 19ch;
+  font-size: clamp(2.5rem, 5.2vw, 4.7rem); font-weight:700; letter-spacing:-.035em; line-height:1.0;
   text-wrap: balance;
 }
 .hero .hero-sub { color: rgba(238,243,247,.92); font-size: clamp(1.05rem,1.7vw,1.4rem); max-width: 46ch; margin-top: 1.4rem; line-height:1.5; }
 .hero .hero-actions { display:flex; flex-wrap:wrap; gap:.9rem; margin-top: 2.2rem; }
+
+/* Short/landscape viewports: scale the tallest slide down so it stays within one screen */
+@media (min-width: 761px) and (max-height: 900px){
+  .hero-slide { padding-top: 96px; }
+  .hero-eyebrow { margin-bottom: 1rem; }
+  .hero h1.hero-title { font-size: clamp(2.4rem, 4.4vw, 3.8rem); }
+  .hero .hero-sub { margin-top: 1rem; font-size: clamp(1.02rem, 1.4vw, 1.22rem); }
+  .hero .hero-actions { margin-top: 1.5rem; }
+}
+@media (min-width: 761px) and (max-height: 740px){
+  .hero-slide { padding-top: 88px; }
+  .hero-eyebrow { margin-bottom: .7rem; }
+  .hero h1.hero-title { font-size: clamp(2.2rem, 3.7vw, 3.1rem); }
+  .hero .hero-sub { margin-top: .8rem; font-size: 1.05rem; max-width: 42ch; }
+  .hero .hero-actions { margin-top: 1.2rem; }
+}
 
 /* animated entrance of active slide text */
 .hero-slide .reveal-line { opacity:0; transform: translateY(26px); }
@@ -382,7 +402,7 @@ h1,h2,h3,h4 { font-family: var(--display); font-weight: 600; line-height: 1.06; 
 
 /* Hero controls */
 .hero-ui {
-  position:absolute; z-index:5; left:0; right:0; bottom: clamp(26px,4vh,40px);
+  position:relative; z-index:5; flex:0 0 auto; padding-top:6px; padding-bottom: clamp(24px,4vh,40px);
 }
 .hero-ui .row { display:flex; align-items:center; justify-content:space-between; gap:1rem; }
 .hero-dots { display:flex; gap:.7rem; align-items:center; }
@@ -474,15 +494,16 @@ h1,h2,h3,h4 { font-family: var(--display); font-weight: 600; line-height: 1.06; 
 
 .hero-inner .hero-text { max-width: 640px; }
 
-/* mobile: top-align hero text with safe header clearance (never overlaps the fixed header) */
+/* mobile: hero sizes to its content (no forced 100vh), so nothing overlaps the
+   controls or the marquee, and there is never a large empty gap. */
 @media (max-width: 760px){
-  .hero { min-height: 88svh; align-items:flex-start; }
-  .hero-slide { display:flex; align-items:flex-start; }
-  .hero-inner { padding-top: 116px; padding-bottom: 132px; }
+  .hero { min-height: auto; }
+  .hero-slide { padding-top: 88px; }
+  .hero-inner { padding-block: clamp(14px, 2.5vh, 26px); }
   .hero .hero-actions .btn { flex: 1 1 auto; }
-  .hero h1.hero-title { font-size: clamp(2.3rem, 8.6vw, 3.4rem); line-height: 1.02; }
+  .hero h1.hero-title { font-size: clamp(2.3rem, 8.2vw, 3.3rem); line-height: 1.03; }
   .hero .hero-sub { font-size: 1.06rem; margin-top: 1.1rem; }
-  .hero .hero-actions { margin-top: 1.8rem; }
+  .hero .hero-actions { margin-top: 1.7rem; }
 }
 
 /* scroll cue */

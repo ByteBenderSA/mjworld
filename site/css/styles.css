@@ -241,20 +241,20 @@ h1,h2,h3,h4 { font-family: var(--display); font-weight: 600; line-height: 1.06; 
 .site-header.hide { transform: translateY(-100%); }
 
 .brand { display:flex; align-items:center; gap:.7rem; z-index:2; }
-.brand .mark { width: 46px; height: auto; flex-shrink:0; }
+.brand .mark { display:block; width: 60px; aspect-ratio: 1224 / 520; flex-shrink:0; background: url("../assets/img/logo-mjne-mark.png") left center / contain no-repeat; }
 .brand .wordmark { display:flex; flex-direction:column; line-height:1; }
 .brand .wordmark b { font-family: var(--display); font-weight:700; font-size:1.12rem; letter-spacing:-.01em; color: var(--navy); }
 .brand .wordmark span { font-size:.6rem; letter-spacing:.24em; text-transform:uppercase; color: var(--muted); font-weight:700; margin-top:3px; }
 .header-light .brand .wordmark b { color:#fff; }
 .header-light .brand .wordmark span { color: var(--d-muted); }
-.header-light .logo-w polyline { stroke:#fff; }
+.header-light .brand .mark { background-image: url("../assets/img/logo-mjne-mark-dark.png"); }
 
-/* once scrolled, the over-hero header turns solid → revert text to ink */
+/* once scrolled, the over-hero header turns solid → revert text + mark to light-bg variants */
 .site-header.header-light.scrolled .brand .wordmark b { color: var(--navy); }
 .site-header.header-light.scrolled .brand .wordmark span { color: var(--muted); }
 .site-header.header-light.scrolled .nav > a,
 .site-header.header-light.scrolled .has-mega > button { color: var(--navy); }
-.site-header.header-light.scrolled .logo-w polyline { stroke: var(--navy); }
+.site-header.header-light.scrolled .brand .mark { background-image: url("../assets/img/logo-mjne-mark.png"); }
 .site-header.header-light.scrolled .burger span,
 .site-header.header-light.scrolled .burger span::before,
 .site-header.header-light.scrolled .burger span::after { background: var(--navy); }
@@ -271,7 +271,12 @@ h1,h2,h3,h4 { font-family: var(--display); font-weight: 600; line-height: 1.06; 
   border-radius:2px;
 }
 .nav > a:hover::after, .has-mega:hover > button::after { transform: scaleX(1); }
-.nav .nav-cta { margin-left:.6rem; }
+
+.header-actions {
+  display:flex; align-items:center; gap:.45rem; flex-shrink:0; z-index:2;
+}
+.header-cta { margin-left:.6rem; }
+.header-cta .cta-short { display:none; }
 
 .has-mega { position:relative; }
 .has-mega > button { display:inline-flex; align-items:center; gap:.3em; font-weight:600; font-size:.93rem; color: var(--navy); padding:.5rem .15rem; white-space:nowrap; }
@@ -303,6 +308,16 @@ h1,h2,h3,h4 { font-family: var(--display); font-weight: 600; line-height: 1.06; 
 @media (max-width: 1200px){
   .nav { display:none; }
   .burger { display:flex; }
+  .header-cta {
+    margin-left:0;
+    padding:.72rem 1.15rem;
+    font-size:.86rem;
+  }
+}
+@media (max-width: 420px){
+  .header-cta .cta-long { display:none; }
+  .header-cta .cta-short { display:inline; }
+  .header-cta { padding:.68rem .95rem; }
 }
 
 /* Mobile drawer */
@@ -319,7 +334,8 @@ h1,h2,h3,h4 { font-family: var(--display); font-weight: 600; line-height: 1.06; 
 .drawer.open { visibility:visible; }
 .drawer.open .scrim { opacity:1; }
 .drawer.open .panel { transform: translateX(0); }
-.drawer .d-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.4rem; }
+.drawer .d-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
+.drawer .d-cta { margin-bottom:1.2rem; flex-shrink:0; }
 .drawer .d-close { width:42px;height:42px;border-radius:12px;display:grid;place-items:center;border:1px solid var(--line); }
 .drawer nav a { display:block; font-family:var(--display); font-weight:600; font-size:1.5rem; color:var(--navy); padding:.75rem 0; border-bottom:1px solid var(--line); }
 .drawer nav a:hover { color: var(--orange); padding-left:.5rem; }
@@ -688,7 +704,7 @@ h1,h2,h3,h4 { font-family: var(--display); font-weight: 600; line-height: 1.06; 
 .site-footer .f-top { display:grid; grid-template-columns: 1.6fr 1fr 1fr 1.3fr; gap: clamp(28px,4vw,48px); padding-bottom: 3rem; border-bottom:1px solid var(--d-line); }
 @media (max-width:900px){ .site-footer .f-top { grid-template-columns: 1fr 1fr; } }
 @media (max-width:560px){ .site-footer .f-top { grid-template-columns: 1fr; } }
-.site-footer .f-brand .mark { width:52px; margin-bottom:1rem; }
+.site-footer .f-brand .mark { display:block; width:80px; aspect-ratio:1224 / 520; margin-bottom:1rem; background: url("../assets/img/logo-mjne-mark-dark.png") left center / contain no-repeat; }
 .site-footer .f-brand p { color: var(--d-muted); font-size:.92rem; max-width: 34ch; margin-top:.4rem; }
 .site-footer h5 { font-family:var(--display); font-weight:600; font-size:.85rem; letter-spacing:.12em; text-transform:uppercase; color:#fff; margin-bottom:1.1rem; }
 .site-footer .f-links a { display:block; color: var(--d-muted); font-size:.94rem; padding:.32rem 0; transition: color .25s, padding .25s; }

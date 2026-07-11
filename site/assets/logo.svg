@@ -6,14 +6,14 @@
       <polyline points="15,76 15,16 32,52 49,16 49,76"/>
       <polyline points="21,76 21,22 32,40 43,22 43,76"/>
     </g>
-    <!-- centre peak (emerald) -->
+    <!-- centre peak (emerald) - narrow, matches official brand -->
     <g stroke="#269B69">
-      <polyline points="50,76 66,18 82,76"/>
-      <polyline points="56,76 66,30 76,76"/>
-      <polyline points="62,76 66,42 70,76"/>
+      <polyline points="57,76 66,18 75,76"/>
+      <polyline points="60,76 66,28 72,76"/>
+      <polyline points="63,76 66,38 69,76"/>
     </g>
-    <!-- W (navy / adaptive) -->
-    <g stroke="#142C44" class="logo-w">
+    <!-- W (navy) -->
+    <g stroke="#142C44">
       <polyline points="77,16 88,76 100,42 112,76 123,16"/>
       <polyline points="83,16 92,68 100,52 108,68 117,16"/>
       <polyline points="89,16 96,60 100,54 104,60 111,16"/>

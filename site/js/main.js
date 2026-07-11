@@ -174,17 +174,73 @@
     });
   });
 
-  /* ----------  Forms (demo handling, no backend)  ---------- */
+  /* ----------  Forms (mailto handoff, no backend)  ---------- */
+  const buildMailtoBody = (form) => {
+    const lines = [];
+    const seenCheckbox = new Set();
+    form.querySelectorAll("input, textarea, select").forEach(el => {
+      if (!el.name) return;
+      const label = (el.closest(".field")?.querySelector("label")?.textContent
+        || el.closest("fieldset")?.querySelector("legend")?.textContent
+        || el.name).replace(/\*.*/, "").trim();
+      if (el.type === "checkbox") {
+        if (el.checked) {
+          if (!seenCheckbox.has(el.name)) {
+            const values = Array.from(form.querySelectorAll(`input[name="${el.name}"]:checked`)).map(c => c.value);
+            lines.push(`${label}: ${values.join(", ")}`);
+            seenCheckbox.add(el.name);
+          }
+        }
+      } else if (el.type === "radio") {
+        if (el.checked) lines.push(`${label}: ${el.value}`);
+      } else if (el.value && el.value.trim()) {
+        lines.push(`${label}: ${el.value.trim()}`);
+      }
+    });
+    return lines.join("\n");
+  };
+
   document.querySelectorAll("[data-form]").forEach(form => {
     form.addEventListener("submit", e => {
       e.preventDefault();
+      const kind = form.dataset.form;
+      const action = form.getAttribute("action") || "";
+      const to = action.replace(/^mailto:/, "").split("?")[0];
+      const isQuote = kind === "quote";
+
+      if (isQuote) {
+        const checked = form.querySelectorAll('input[name="interest"]:checked');
+        if (checked.length === 0) {
+          const legend = form.querySelector(".checkbox-field legend");
+          if (legend) { legend.style.color = "#c0392b"; setTimeout(() => legend.style.color = "", 3500); }
+          form.querySelector(".checkbox-field")?.scrollIntoView({ behavior: "smooth", block: "center" });
+          return;
+        }
+      }
+
+      const interestVals = Array.from(form.querySelectorAll('input[name="interest"]:checked')).map(c => c.value);
+      const subject = isQuote
+        ? `Quote request${interestVals.length ? " — " + interestVals.join(", ") : ""}`
+        : `Website enquiry${form.querySelector('[name="topic"]')?.value ? " — " + form.querySelector('[name="topic"]').value : ""}`;
+      const body = buildMailtoBody(form);
+
+      const mailto = (to ? `mailto:${to}` : "mailto:") +
+        `?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
       const ok = form.querySelector(".form-success");
       const btn = form.querySelector("[type=submit]");
-      if (btn) { btn.textContent = "Sending…"; btn.disabled = true; }
+      const originalLabel = btn?.dataset.label || btn?.textContent || "Send";
+      if (btn) { btn.textContent = "Opening your email…"; btn.disabled = true; }
+
+      window.location.href = mailto;
+
       setTimeout(() => {
-        form.reset();
-        if (btn) { btn.textContent = btn.dataset.label || "Send"; btn.disabled = false; }
-        if (ok) { ok.classList.add("show"); ok.scrollIntoView({ behavior: "smooth", block: "center" }); setTimeout(() => ok.classList.remove("show"), 6000); }
+        if (btn) { btn.textContent = originalLabel; btn.disabled = false; }
+        if (ok) {
+          ok.classList.add("show");
+          ok.scrollIntoView({ behavior: "smooth", block: "center" });
+          setTimeout(() => ok.classList.remove("show"), 8000);
+        }
       }, 900);
     });
   });
@@ -271,10 +327,11 @@
     }
   })();
 
-  /* ----------  Prefill from ?product= / ?subject=  ---------- */
+  /* ----------  Prefill from ?product= / ?subject= / ?interest= ---------- */
   try {
     const params = new URLSearchParams(window.location.search);
     const product = params.get("product") || params.get("subject");
+    const interests = params.getAll("interest");
     if (product) {
       document.querySelectorAll("[data-prefill='product']").forEach(el => {
         if (el.tagName === "SELECT") {
@@ -286,6 +343,16 @@
       document.querySelectorAll("[data-prefill='note']").forEach(el => {
         if (!el.value) el.value = "I'm interested in: " + product;
       });
+    }
+    if (interests.length) {
+      document.querySelectorAll("[data-prefill-check] input[type='checkbox']").forEach(cb => {
+        if (interests.includes(cb.value)) cb.checked = true;
+      });
+    }
+    // auto-open quote form when hash targets it
+    if (window.location.hash === "#quote") {
+      const el = document.getElementById("quote");
+      if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
     }
   } catch (e) {}
 

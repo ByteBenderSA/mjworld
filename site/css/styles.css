@@ -599,6 +599,8 @@ h1,h2,h3,h4 { font-family: var(--display); font-weight: 600; line-height: 1.06; 
 .chips { display:flex; flex-wrap:wrap; gap:.5rem; }
 .chips .chip { display:inline-flex; align-items:center; gap:.45em; padding:.4em .8em; border-radius:100px; background: var(--paper); border:1px solid var(--line); font-size:.8rem; font-weight:600; color: var(--navy); }
 .chips .chip svg { width:14px; height:14px; color: var(--emerald); }
+.chips .on-dark-chip { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.18); color:#fff; }
+.chips .on-dark-chip svg { color: var(--emerald-soft, #7dd6a8); }
 
 /* =====================================================================
    FEATURE / SPLIT SECTIONS
@@ -775,6 +777,36 @@ h1,h2,h3,h4 { font-family: var(--display); font-weight: 600; line-height: 1.06; 
 .contact-tile b { font-family:var(--display); color: var(--navy); display:block; }
 .contact-tile span,.contact-tile a { color: var(--muted); font-size:.92rem; }
 .contact-tile a:hover { color: var(--orange); }
+
+/* quick action buttons on contact hero */
+.quick-actions { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:.9rem; max-width: 780px; }
+@media (max-width: 720px){ .quick-actions { grid-template-columns:1fr; } }
+.qa-btn { display:flex; align-items:center; gap:.9rem; padding:1rem 1.15rem; border-radius:14px; background:#fff; border:1.5px solid var(--line); color: var(--navy); text-decoration:none; box-shadow: var(--sh-sm); transition: transform .25s var(--ease), box-shadow .25s, border-color .25s; }
+.qa-btn:hover { transform: translateY(-3px); box-shadow: var(--sh-md); border-color: var(--orange); }
+.qa-btn .qa-ic { width:44px; height:44px; border-radius:12px; flex-shrink:0; display:grid; place-items:center; }
+.qa-btn .qa-ic svg { width:22px; height:22px; }
+.qa-btn .qa-body { display:flex; flex-direction:column; line-height:1.25; min-width:0; }
+.qa-btn .qa-body b { font-family:var(--display); font-weight:700; font-size:.98rem; color: var(--navy); }
+.qa-btn .qa-body small { font-size:.78rem; color: var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.qa-btn.qa-whatsapp .qa-ic { background: rgba(37,211,102,.14); color:#25d366; }
+.qa-btn.qa-email .qa-ic { background: rgba(38,155,105,.12); color: var(--emerald); }
+.qa-btn.qa-phone .qa-ic { background: rgba(240,110,0,.12); color: var(--orange); }
+
+/* form checkbox + radio + fieldset styling */
+.field label .opt { color: var(--muted); font-weight:500; font-size:.78rem; }
+.checkbox-field, .radio-field { border:none; padding:0; margin: 0 0 1.1rem; }
+.checkbox-field legend, .radio-field legend { display:block; font-weight:700; font-size:.86rem; color: var(--navy); margin-bottom:.55rem; padding:0; }
+.checkbox-field legend .req { color: var(--orange); }
+.checkbox-grid { display:grid; grid-template-columns:1fr 1fr; gap:.5rem .8rem; }
+@media (max-width: 560px){ .checkbox-grid { grid-template-columns:1fr; } }
+.chk, .rad { display:flex; align-items:center; gap:.6rem; padding:.7rem .9rem; border:1.5px solid var(--line); border-radius:12px; background:var(--paper); cursor:pointer; transition: border-color .2s, background .2s; font-size:.92rem; color: var(--navy); }
+.chk:hover, .rad:hover { border-color: var(--orange); }
+.chk input, .rad input { width:18px; height:18px; accent-color: var(--orange); flex-shrink:0; }
+.chk input:checked ~ span, .rad input:checked ~ span { font-weight:600; }
+.chk:has(input:checked), .rad:has(input:checked) { border-color: var(--orange); background:#fff; box-shadow: 0 0 0 3px rgba(240,110,0,.08); }
+.radio-row { display:flex; gap:.6rem; flex-wrap:wrap; }
+.radio-row .rad { flex:1 1 auto; min-width: 120px; justify-content:center; }
+.field-group-title { font-family: var(--display); font-weight:700; color: var(--navy); font-size:1rem; margin: 1.5rem 0 .8rem; padding-top:1rem; border-top:1px dashed var(--line); }
 
 /* =====================================================================
    ACCORDION (FAQ)

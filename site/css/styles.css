@@ -189,6 +189,12 @@ h1,h2,h3,h4 { font-family: var(--display); font-weight: 600; line-height: 1.06; 
 .btn-ghost:hover { border-color: var(--navy); background: var(--navy); color:#fff; box-shadow: var(--sh-md); }
 .on-dark .btn-ghost { --fg:#fff; border-color: var(--d-line-2); }
 .on-dark .btn-ghost:hover { background:#fff; color: var(--navy); border-color:#fff; }
+.hero .btn-ghost {
+  --fg:#fff;
+  border-color: rgba(255,255,255,.42);
+  background: rgba(255,255,255,.08);
+}
+.hero .btn-ghost:hover { background:#fff; color: var(--navy); border-color:#fff; box-shadow: var(--sh-md); }
 
 .btn-light { --bg:#fff; --fg: var(--navy); box-shadow: var(--sh-md); }
 .btn-light::after { background: var(--paper-2); }
@@ -229,6 +235,7 @@ h1,h2,h3,h4 { font-family: var(--display); font-weight: 600; line-height: 1.06; 
 }
 .site-header .bar {
   display:flex; align-items:center; justify-content:space-between;
+  gap: clamp(.5rem, 2vw, 1.25rem);
   height: 74px;
   border-bottom: 1px solid transparent;
 }
@@ -240,7 +247,7 @@ h1,h2,h3,h4 { font-family: var(--display); font-weight: 600; line-height: 1.06; 
 }
 .site-header.hide { transform: translateY(-100%); }
 
-.brand { display:flex; align-items:center; gap:.7rem; z-index:2; }
+.brand { display:flex; align-items:center; gap:.7rem; z-index:2; min-width:0; }
 .brand .mark { display:block; width: 60px; aspect-ratio: 1224 / 520; flex-shrink:0; background: url("../assets/img/logo-mjne-mark.png") left center / contain no-repeat; }
 .brand .wordmark { display:flex; flex-direction:column; line-height:1; }
 .brand .wordmark b { font-family: var(--display); font-weight:700; font-size:1.12rem; letter-spacing:-.01em; color: var(--navy); }
@@ -313,6 +320,7 @@ h1,h2,h3,h4 { font-family: var(--display); font-weight: 600; line-height: 1.06; 
     padding:.72rem 1.15rem;
     font-size:.86rem;
   }
+  .brand .wordmark span { display:none; }
 }
 @media (max-width: 420px){
   .header-cta .cta-long { display:none; }
@@ -347,7 +355,10 @@ h1,h2,h3,h4 { font-family: var(--display); font-weight: 600; line-height: 1.06; 
 .hero {
   position:relative; min-height: 100svh; min-height: 100vh;
   display:flex; flex-direction:column;
-  background: var(--navy-900); color:#fff; overflow:hidden;
+  background: var(--navy-900); color:#fff;
+  overflow:hidden;
+  width:100%;
+  max-width:100%;
 }
 /* Grid-stacked slides: all overlap in one cell (for the crossfade) yet still
    contribute height, so the hero sizes to the tallest slide's content. */
@@ -477,8 +488,14 @@ h1,h2,h3,h4 { font-family: var(--display); font-weight: 600; line-height: 1.06; 
 
 /* hero device showcase (right) */
 .hero-slide .device {
-  position:absolute; right: clamp(-40px, 2vw, 70px); top:50%; transform: translateY(-46%);
-  width: clamp(300px, 34vw, 480px); z-index:2;
+  position:absolute;
+  right: clamp(16px, 4vw, 70px);
+  top:50%;
+  transform: translateY(-46%);
+  width: clamp(260px, 30vw, 460px);
+  max-width: calc(50% - var(--gutter));
+  z-index:2;
+  pointer-events:none;
 }
 .hero-slide .device .halo {
   position:absolute; inset:-12% -6%; border-radius:50%;
@@ -496,7 +513,7 @@ h1,h2,h3,h4 { font-family: var(--display); font-weight: 600; line-height: 1.06; 
 .hero-slide.active .device { animation: floaty 6s ease-in-out infinite; }
 @keyframes floaty { 0%,100%{ transform: translateY(-48%);} 50%{ transform: translateY(-42%);} }
 .hero-slide .device .tagfloat {
-  position:absolute; left:-22px; bottom:34px; z-index:3;
+  position:absolute; left:max(-12px, -2vw); bottom:34px; z-index:3;
   background: rgba(255,255,255,.95); border-radius:14px; padding:.7rem .95rem; box-shadow: var(--sh-lg);
   display:flex; align-items:center; gap:.6rem;
 }
@@ -505,8 +522,20 @@ h1,h2,h3,h4 { font-family: var(--display); font-weight: 600; line-height: 1.06; 
 .hero-slide .device .tagfloat svg { width:18px;height:18px; }
 .hero-slide .device .tagfloat b { font-family:var(--display); font-weight:700; color:var(--navy); font-size:.86rem; line-height:1; }
 .hero-slide .device .tagfloat small { color: var(--muted); font-size:.72rem; }
-@media (max-width: 1024px){ .hero-slide .device { width: clamp(240px, 40vw, 340px); right:-30px; opacity:.5; } }
-@media (max-width: 760px){ .hero-slide .device { display:none; } }
+@media (max-width: 1100px){
+  .hero-slide .device {
+    width: clamp(220px, 34vw, 300px);
+    right: var(--gutter);
+    max-width: min(300px, 40vw);
+  }
+  .hero-inner .hero-text { max-width: min(640px, 56%); }
+  .hero h1.hero-title { max-width: 12ch; }
+}
+@media (max-width: 900px){
+  .hero-slide .device { display:none; }
+  .hero-inner .hero-text { max-width: 100%; }
+  .hero h1.hero-title { max-width: 19ch; }
+}
 
 .hero-inner .hero-text { max-width: 640px; }
 
@@ -516,10 +545,16 @@ h1,h2,h3,h4 { font-family: var(--display); font-weight: 600; line-height: 1.06; 
   .hero { min-height: auto; }
   .hero-slide { padding-top: 88px; }
   .hero-inner { padding-block: clamp(14px, 2.5vh, 26px); }
-  .hero .hero-actions .btn { flex: 1 1 auto; }
+  .hero .hero-actions { flex-direction: column; align-items: stretch; }
+  .hero .hero-actions .btn { flex: 0 0 auto; width: 100%; max-width: 100%; }
   .hero h1.hero-title { font-size: clamp(2.3rem, 8.2vw, 3.3rem); line-height: 1.03; }
   .hero .hero-sub { font-size: 1.06rem; margin-top: 1.1rem; }
   .hero .hero-actions { margin-top: 1.7rem; }
+}
+@media (min-width: 761px) and (max-width: 1100px){
+  .hero .hero-actions { flex-wrap: nowrap; }
+  .hero .hero-actions .btn { flex: 0 1 auto; min-width: 0; }
+  .hero .hero-actions .btn-ghost { flex-shrink: 0; }
 }
 
 /* scroll cue */
